@@ -1,42 +1,43 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&display=swap');
+*{
+  box-sizing: border-box;
 }
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+body{
+  margin: 0;
+  padding: 0;
+  font-family: 'Karla',sans-serif;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+button:focus{
+  outline: none;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+     /*Sidebar Styles*/
+.pane{
+  overflow: auto;
+  padding: 10px
 }
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.sidebar{
+  width: 20%;
+  height: 100vh;
+  
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.sidebar--note{
+  display: flex;
 }
-
-.card {
-  padding: 2em;
+.sidebar--header{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
-
-.read-the-docs {
-  color: #888;
+.sidebar--header>h3{
+  font-size: 1.75rem;
 }
+.new-note{
+  cursor: pointer;
+  background-color:#4A4E74 ;
+  border: none;
+  color: white;
+  border-radius:3px ;
+  height: 30px;
+  width: 30px;
+}
+/*Note List Style*/
