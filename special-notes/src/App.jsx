@@ -30,7 +30,7 @@ export default function App() {
   function findCurrentNotes() {
     return (
       notes.find((note) => {
-        note.id === currentNoteId;
+        return note.id === currentNoteId;
       }) || notes[0]
     );
   }
@@ -45,7 +45,7 @@ export default function App() {
             setCurrentNoteId={setCurrentNoteId}
             newNote={createNewNote}
           />
-          {currentNoteId && notes.length > 0 && <Editor currentNote={findCurrentNotes} updateNotes={updateNotes} />}
+          {currentNoteId && notes.length > 0 && <Editor currentNote={findCurrentNotes()} updateNotes={updateNotes} />}
         </Split>
       ) : (
         <div className="no-notes">
