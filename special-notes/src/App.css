@@ -92,6 +92,7 @@ button:focus {
 }
 .selected-note {
   background-color: #4a4e74;
+  border-radius: 5px;
 }
 .selected-note .text-snippet {
   color: white;
