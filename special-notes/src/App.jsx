@@ -7,7 +7,9 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 export default function App() {
-  const [notes, setNotes] = useState(JSON.parse(localStorage.getItem('notes')) || []);
+  const [notes, setNotes] = useState(() => {
+    return JSON.parse(localStorage.getItem('notes')) || [];
+  });
   const [currentNoteId, setCurrentNoteId] = useState((notes[0] && notes[0].id) || '');
 
   // Function to add new note(local Storage)
