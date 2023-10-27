@@ -3,7 +3,7 @@ import Editor from './components/Editor';
 import { data } from './data';
 import Split from 'react-split';
 import { nanoid } from 'nanoid';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 export default function App() {
