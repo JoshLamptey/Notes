@@ -16,6 +16,7 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
+    console.log(notes[0].body.split('\n'));
   }, [notes]);
 
   function createNewNote() {
