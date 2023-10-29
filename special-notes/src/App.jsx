@@ -16,7 +16,6 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
-    console.log(notes[0].body.split('\n'));
   }, [notes]);
 
   function createNewNote() {
@@ -28,13 +27,31 @@ export default function App() {
     setCurrentNoteId(NewNote.id);
   }
 
+  /// this function will be refactored
   function updateNotes(text) {
-    setNotes((oldNotes) =>
-      oldNotes.map((oldNote) => {
-        return oldNote.id === currentNoteId ? { ...oldNote, body: text } : oldNote;
-      }),
-    );
+    // try to rearrange the updated notes to the top
+
+    setNotes((oldNotes) => {
+      const newArray = [];
+      for (let i = 0; i < oldNotes.length; i++) {
+        const oldNote = oldNotes[i];
+        if (oldNote.id === currentNoteId) {
+          newArray.unshift({ ...oldNote, body: text });
+        } else {
+          newArray.push(oldNote);
+        }
+      }
+      return newArray;
+    });
   }
+  // this doesn't update notes
+  // this is a reference
+  //setNotes((oldNotes) =>
+  //  oldNotes.map((oldNote) => {
+  //  return oldNote.id === currentNoteId ? { ...oldNote, body: text } : oldNote;
+  //}),
+  //);
+  //}
 
   function findCurrentNotes() {
     return (
