@@ -26,6 +26,10 @@ export default function App() {
     setNotes((prevNotes) => [NewNote, ...prevNotes]);
     setCurrentNoteId(NewNote.id);
   }
+  function deleteNotes(event, noteId) {
+    event.stopPropagation();
+    setNotes((oldNotes) => oldNotes.filter((note) => note.id != noteId));
+  }
 
   /// this function will be refactored
   function updateNotes(text) {
@@ -70,6 +74,7 @@ export default function App() {
             currentNote={findCurrentNotes()}
             setCurrentNoteId={setCurrentNoteId}
             newNote={createNewNote}
+            deleteNotes={deleteNotes}
           />
           {currentNoteId && notes.length > 0 && <Editor currentNote={findCurrentNotes()} updateNotes={updateNotes} />}
         </Split>
