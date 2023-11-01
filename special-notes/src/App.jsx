@@ -26,11 +26,6 @@ export default function App() {
     setNotes((prevNotes) => [NewNote, ...prevNotes]);
     setCurrentNoteId(NewNote.id);
   }
-  function deleteNotes(event, noteId) {
-    event.stopPropagation();
-    setNotes((oldNotes) => oldNotes.filter((note) => note.id != noteId));
-  }
-
   /// this function will be refactored
   function updateNotes(text) {
     // try to rearrange the updated notes to the top
@@ -56,6 +51,11 @@ export default function App() {
   //}),
   //);
   //}
+
+  function deleteNotes(event, noteId) {
+    event.stopPropagation();
+    setNotes((oldnotes) => oldnotes.filter((note) => note.id != noteId));
+  }
 
   function findCurrentNotes() {
     return (
