@@ -1,6 +1,5 @@
 import Sidebar from './components/Sidebar';
 import Editor from './components/Editor';
-import { data } from './data';
 import Split from 'react-split';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
@@ -10,7 +9,13 @@ export default function App() {
   const [notes, setNotes] = useState(() => {
     return JSON.parse(localStorage.getItem('notes')) || [];
   });
-  const [currentNoteId, setCurrentNoteId] = useState((notes[0] && notes[0].id) || '');
+  const [currentNoteId, setCurrentNoteId] = useState(notes[0]?.id || '');
+
+  // a replacement for the find currentnote helper function
+  const currentNote =
+    notes.find((note) => {
+      note.id === currentNoteId;
+    }) || notes[0];
 
   // Function to add new note(local Storage)
 
@@ -57,26 +62,18 @@ export default function App() {
     setNotes((oldnotes) => oldnotes.filter((note) => note.id != noteId));
   }
 
-  function findCurrentNotes() {
-    return (
-      notes.find((note) => {
-        return note.id === currentNoteId;
-      }) || notes[0]
-    );
-  }
-
   return (
     <main>
       {notes.length > 0 ? (
         <Split sizes={[30, 70]} direction="horizontal" className="split">
           <Sidebar
             notes={notes}
-            currentNote={findCurrentNotes()}
+            currentNote={currentNote}
             setCurrentNoteId={setCurrentNoteId}
             newNote={createNewNote}
             deleteNotes={deleteNotes}
           />
-          {currentNoteId && notes.length > 0 && <Editor currentNote={findCurrentNotes()} updateNotes={updateNotes} />}
+          {currentNoteId && notes.length > 0 && <Editor currentNote={currentNote} updateNotes={updateNotes} />}
         </Split>
       ) : (
         <div className="no-notes">
