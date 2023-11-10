@@ -2,15 +2,13 @@ import Sidebar from './components/Sidebar';
 import Editor from './components/Editor';
 import Split from 'react-split';
 import { nanoid } from 'nanoid';
-import { onSnapshot } from 'firebase/firestore';
+import { onSnapshot, addDoc } from 'firebase/firestore';
 import { collectNotes } from './firebase';
 import { useEffect, useState } from 'react';
 import './App.css';
 
 export default function App() {
-  const [notes, setNotes] = useState(() => {
-    return JSON.parse(localStorage.getItem('notes')) || [];
-  });
+  const [notes, setNotes] = useState([]);
   const [currentNoteId, setCurrentNoteId] = useState(notes[0]?.id || '');
 
   // a replacement for the find currentnote helper function
@@ -22,19 +20,22 @@ export default function App() {
   // Function to add new note(local Storage)
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collectNotes, () => {
+    const unsubscribe = onSnapshot(collectNotes, (snapshot) => {
       // sync up our local notes arrray with the snapshot data
-      console.log('Things Are Changing ');
+      const notesArr = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setNotes(notesArr);
     });
   }, []);
 
-  function createNewNote() {
+  async function createNewNote() {
     const NewNote = {
-      id: nanoid(),
       body: "# Type Your Markdown  Note's Title Here",
     };
-    setNotes((prevNotes) => [NewNote, ...prevNotes]);
-    setCurrentNoteId(NewNote.id);
+    const newNoteRef = await addDoc(collectNotes, NewNote);
+    setCurrentNoteId(newNoteRef.id);
   }
   /// this function will be refactored
   function updateNotes(text) {
