@@ -1,22 +1,21 @@
 import Sidebar from './components/Sidebar';
 import Editor from './components/Editor';
 import Split from 'react-split';
-import { onSnapshot, addDoc, doc, deleteDoc } from 'firebase/firestore';
+import { onSnapshot, addDoc, doc, deleteDoc, setDoc } from 'firebase/firestore';
 import { collectNotes, db } from './firebase';
 import { useEffect, useState } from 'react';
 import './App.css';
 
 export default function App() {
   const [notes, setNotes] = useState([]);
-  const [currentNoteId, setCurrentNoteId] = useState(notes[0]?.id || '');
+  const [currentNoteId, setCurrentNoteId] = useState('');
 
-  // a replacement for the find currentnote helper function
   const currentNote =
     notes.find((note) => {
       note.id === currentNoteId;
     }) || notes[0];
 
-  // Function to add new note(local Storage)
+  // Function to add new note(firestore database)
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collectNotes, (snapshot) => {
@@ -29,6 +28,12 @@ export default function App() {
     });
   }, []);
 
+  useEffect(() => {
+    if (!currentNoteId) {
+      setCurrentNoteId(notes[0]?.id);
+    }
+  }, [notes]);
+
   async function createNewNote() {
     const NewNote = {
       body: "# Type Your Markdown  Note's Title Here",
@@ -37,30 +42,10 @@ export default function App() {
     setCurrentNoteId(newNoteRef.id);
   }
   /// this function will be refactored
-  function updateNotes(text) {
-    // try to rearrange the updated notes to the top
-
-    setNotes((oldNotes) => {
-      const newArray = [];
-      for (let i = 0; i < oldNotes.length; i++) {
-        const oldNote = oldNotes[i];
-        if (oldNote.id === currentNoteId) {
-          newArray.unshift({ ...oldNote, body: text });
-        } else {
-          newArray.push(oldNote);
-        }
-      }
-      return newArray;
-    });
+  async function updateNotes(text) {
+    const docRef = doc(db, 'notes', currentNoteId);
+    await setDoc(docRef, { body: text }, { merge: true });
   }
-  // this doesn't update notes
-  // this is a reference
-  //setNotes((oldNotes) =>
-  //  oldNotes.map((oldNote) => {
-  //  return oldNote.id === currentNoteId ? { ...oldNote, body: text } : oldNote;
-  //}),
-  //);
-  //}
 
   async function deleteNotes(noteId) {
     const docRef = doc(db, 'notes', noteId);
