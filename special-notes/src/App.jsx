@@ -10,10 +10,9 @@ export default function App() {
   const [notes, setNotes] = useState([]);
   const [currentNoteId, setCurrentNoteId] = useState('');
 
-  const currentNote =
-    notes.find((note) => {
-      note.id === currentNoteId;
-    }) || notes[0];
+  const sortedNotes = notes.sort((a, b) => b.updatedAt - a.updatedAt);
+
+  const currentNote = notes.find((note) => note.id === currentNoteId) || notes[0];
 
   // Function to add new note(firestore database)
 
@@ -33,6 +32,7 @@ export default function App() {
       setCurrentNoteId(notes[0]?.id);
     }
   }, [notes]);
+  console.log(currentNoteId);
 
   async function createNewNote() {
     const NewNote = {
@@ -41,6 +41,7 @@ export default function App() {
       updatedAt: Date.now(),
     };
     const newNoteRef = await addDoc(collectNotes, NewNote);
+    console.log(newNoteRef.id);
     setCurrentNoteId(newNoteRef.id);
   }
   /// this function will be refactored
@@ -59,7 +60,7 @@ export default function App() {
       {notes.length > 0 ? (
         <Split sizes={[30, 70]} direction="horizontal" className="split">
           <Sidebar
-            notes={notes}
+            notes={sortedNotes}
             currentNote={currentNote}
             setCurrentNoteId={setCurrentNoteId}
             newNote={createNewNote}
