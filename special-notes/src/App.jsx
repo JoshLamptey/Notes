@@ -37,6 +37,8 @@ export default function App() {
   async function createNewNote() {
     const NewNote = {
       body: "# Type Your Markdown  Note's Title Here",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
     const newNoteRef = await addDoc(collectNotes, NewNote);
     setCurrentNoteId(newNoteRef.id);
@@ -44,7 +46,7 @@ export default function App() {
   /// this function will be refactored
   async function updateNotes(text) {
     const docRef = doc(db, 'notes', currentNoteId);
-    await setDoc(docRef, { body: text }, { merge: true });
+    await setDoc(docRef, { body: text, updatedAt: Date.now() }, { merge: true });
   }
 
   async function deleteNotes(noteId) {
