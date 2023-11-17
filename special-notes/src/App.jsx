@@ -9,7 +9,7 @@ import './App.css';
 export default function App() {
   const [notes, setNotes] = useState([]);
   const [currentNoteId, setCurrentNoteId] = useState('');
-
+  const [tempNoteText, setTempNoteText] = useState('');
   const sortedNotes = notes.sort((a, b) => b.updatedAt - a.updatedAt);
 
   const currentNote = notes.find((note) => note.id === currentNoteId) || notes[0];
@@ -25,8 +25,14 @@ export default function App() {
       }));
       setNotes(notesArr);
     });
+    return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    if (currentNote) {
+      setTempNoteText(currentNote.body);
+    }
+  }, [currentNote]);
   useEffect(() => {
     if (!currentNoteId) {
       setCurrentNoteId(notes[0]?.id);
@@ -66,7 +72,7 @@ export default function App() {
             newNote={createNewNote}
             deleteNotes={deleteNotes}
           />
-          {currentNoteId && notes.length > 0 && <Editor currentNote={currentNote} updateNotes={updateNotes} />}
+          <Editor tempNoteText={tempNoteText} setTempNoteText={setTempNoteText} />
         </Split>
       ) : (
         <div className="no-notes">
