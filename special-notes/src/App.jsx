@@ -29,6 +29,15 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      if (tempNoteText !== currentNote.body) {
+        updateNotes(tempNoteText);
+      }
+    }, 3000);
+    return () => clearTimeout(timeOutId);
+  }, [tempNoteText]);
+
+  useEffect(() => {
     if (currentNote) {
       setTempNoteText(currentNote.body);
     }
